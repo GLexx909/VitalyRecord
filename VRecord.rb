@@ -7,7 +7,7 @@ class VRecord
 	def initialize (params={})
 	    params.each do |key, value|
 	      self.send("#{key}=", value) if value
-    	end
+    	    end
   	end
 
   	def self.connect_db 
@@ -15,7 +15,7 @@ class VRecord
   	end
 
 	def self.tb_name
-    	tb_name = self.to_s.downcase
+    		tb_name = self.to_s.downcase
   	end  
 
   	def self.select_all
@@ -30,7 +30,7 @@ class VRecord
 	    arr
  	end
 
-    def self.limit(param)
+       def self.limit(param)
 	    inquiry = "SELECT * FROM #{tb_name} LIMIT #{param};" 
 	    arr = self::Relation.new
 	    connect_db.exec(inquiry) do |result|
@@ -40,9 +40,9 @@ class VRecord
 	    end
 	    @connect.close
 	    arr
-    end
+       end
 
-    def self.find_entry(id)
+       def self.find_entry(id)
 	    inquiry = "SELECT * FROM #{tb_name} WHERE ID = #{id} LIMIT 1"
 	    arr = []
 	    connect_db.exec(inquiry) do |result|
@@ -52,9 +52,9 @@ class VRecord
 	    end
 	    @connect.close
 	    arr.first
-    end
+       end
 
-    def self.add_entry(params) #Добавить запись
+       def self.add_entry(params) #Добавить запись
 	    values = []
 	    columns = []
 	    params.each{|key, value| columns.push(key.to_s); values.push("'#{value.to_s}'")}
@@ -64,20 +64,20 @@ class VRecord
 	    record = connect_db.exec(inquiry)
 	    @connect.close
 	    self.new(record.first) #Здесь выводим запись
-    end
+       end
 
-    def self.delete_entry(id) #Удалить запись по id
+       def self.delete_entry(id) #Удалить запись по id
 	    connect_db.exec("DELETE FROM #{tb_name} WHERE ID = #{id}")
 	    @connect.close
-	end
+       end
 
-    def self.update_entry(column_name, new_value, id)# Изменить запись по id
+       def self.update_entry(column_name, new_value, id)# Изменить запись по id
     	inquiry = "UPDATE #{tb_name} SET #{column_name} = #{new_value} WHERE ID = #{id}"
 	    connect_db.exec(inquiry)
 	    @connect.close
-    end
+       end
 
-    def self.where(params) #Точный поиск по нескольким значениям
+       def self.where(params) #Точный поиск по нескольким значениям
 	    updates = []
 	    params.each{|key, val| updates.push("#{key} = '#{val}'")} 
 	    inquiry = "SELECT * FROM #{tb_name} WHERE #{updates.join(" AND ")}"
@@ -87,11 +87,11 @@ class VRecord
 	        arr << self.new(e)
 	      }
 	    end
-	    @connect.close
+	      @connect.close
 	    arr
-    end
+       end
 
-    def self.order(column_name, trend = "ASC")
+       def self.order(column_name, trend = "ASC")
 	    inquiry = "SELECT * FROM #{tb_name} ORDER BY #{column_name} #{trend};"
 	    arr = self::Relation.new
 	    connect_db.exec(inquiry) do |result|
@@ -101,32 +101,32 @@ class VRecord
 	    end
 	    @connect.close
 	    arr
-    end
+       end
 
-    def self.column_add(new_column_name, datatype = 'Text')
+       def self.column_add(new_column_name, datatype = 'Text')
 	    connect_db.exec("ALTER TABLE #{tb_name} ADD COLUMN IF NOT EXISTS #{new_column_name} #{datatype};")
 	    @connect.close
-    end
+       end
 
-    def self.column_drop(column_name)
+       def self.column_drop(column_name)
 	    connect_db.exec("ALTER TABLE #{tb_name} DROP COLUMN IF EXISTS #{column_name};")
 	    @connect.close
-    end
+       end
 
-    def table_rename(tb_name_new)
+       def table_rename(tb_name_new)
 	    connect_db.exec("ALTER TABLE IF EXISTS #{tb_name} RENAME TO #{tb_name_new};")
 	    @connect.close
-    end
+       end
 
-    def column_rename(column_old_name, column_new_name)
+       def column_rename(column_old_name, column_new_name)
 	    connect_db.exec("ALTER TABLE IF EXISTS ONLY #{tb_name} * RENAME COLUMN #{column_name} TO #{column_new_name}")    
 	    @connect.close
-    end
+       end
 
   
 
-    class Relation < Array #Массив создан так, чтоб вы#бнуться
-    end
+       class Relation < Array #Массив создан так, чтоб вы#бнуться
+       end
 
 
 
