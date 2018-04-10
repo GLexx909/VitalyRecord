@@ -125,7 +125,7 @@ class VRecord
 
   
 
-  class Relation < Array
+  class Relation < Array #Массив создан так, чтоб вы#бнуться
   end
 
 
